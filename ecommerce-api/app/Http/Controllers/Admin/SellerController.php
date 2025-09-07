@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Buyer;
+use App\Models\RequestAsSeller;
+use App\Models\Role;
 use App\Models\Seller;
 use App\Models\User;
 use Exception;
@@ -26,7 +29,7 @@ class SellerController extends Controller
         $offset = ($page - 1) * $perPage;
 
         // // Start building the query with relationships
-        $query = User::with(['role', 'seller']);
+        $query = User::with(['role', 'seller'])->where('role_id', Role::where('name', 'seller')->value('id'));
 
         // Fetch users with pagination
         $users = $query->orderBy('created_at', 'desc')
@@ -46,15 +49,16 @@ class SellerController extends Controller
             return [
                 'id' => $user->id,
                 'role' => $user->role ? $user->role->name : null,
+                'gender' => $user->gender,
+                'dob' => $user->dob,
                 'full_name' => $user->full_name,
                 'email' => $user->email,
                 'image' => $user->image,
                 'phone' => $user->phone,
                 'status' => $user->status,
-                'shop_name' => $user->seller ? $user->seller->shop_name : null,
                 'rating' => $user->seller ? $user->seller->rating : null,
                 'balance' => $user->seller ? $user->seller->balance : null,
-                'verification_status' => $user->seller ? $user->seller->verification_status : null,
+                'seller_status' => $user->seller ? $user->seller->staus : null,
                 'created_at' => $user->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $user->updated_at->format('Y-m-d H:i:s'),
             ];
@@ -74,47 +78,15 @@ class SellerController extends Controller
         ], 200);
     }
 
-    public function approval(string $id)
+    
+    // /**
+    //  * rejection.
+    //  *
+    //  * @return \Illuminate\Http\JsonResponse
+    //  */
+    public function rejection(string $id)
     {
-        $seller = Seller::findOrFail($id);
-        try {
-            $seller->update(['status' => 1]);
-            return response()->json(
-                [
-                    'verified' => true,
-                    'status' => 'success',
-                    'message' => 'Seller approved successfully.'
-                ],
-                200
-            );
-        } catch (Exception $e) {
-            return response()->json([
-                'verified' => false,
-                'status' => 'error',
-                'message' => Str::limit($e->getMessage(), 150, '...'),
-            ], 500);
-        }
-    }
-
-    public function rejection(string $id){
-        $seller = Seller::findOrFail($id);
-        try {
-            $seller->update(['status' => 0]);
-            return response()->json(
-                [
-                    'verified' => true,
-                    'status' => 'success',
-                    'message' => 'Seller rejected successfully.'
-                ],
-                200
-            );
-        } catch (Exception $e) {
-            return response()->json([
-                'verified' => false,
-                'status' => 'error',
-                'message' => Str::limit($e->getMessage(), 150, '...'),
-            ], 500);
-        }
+        //
     }
 
     /**

@@ -11,9 +11,6 @@ class Seller extends Model
 
     protected $fillable = [
        'user_id',
-       'shop_name',
-       'store_slug',
-       'verification_status',
        'rating',
        'status',
        'balance',
@@ -22,7 +19,6 @@ class Seller extends Model
     protected $casts = [
         'balance' => 'decimal:2',
         'status' => 'integer',
-        'verification_status' => 'integer',
         'rating' => 'integer',
     ];
 

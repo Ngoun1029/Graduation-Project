@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('sellers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('store_name', 100)->unique();
-            $table->string('store_slug',100)->unique();
-            $table->integer('verification_status')->default(0);
             $table->integer('rating')->default(0);
             $table->integer('status')->default(1);
             $table->decimal('balance', 10, 2)->default(0);

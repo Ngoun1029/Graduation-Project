@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('buyers', function (Blueprint $table) {
+        Schema::create('request_as_seller', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->bigInteger('loyalty_points')->default(0);
+            $table->text('description');
+            $table->string('request_date');
+            $table->enum('pending_status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('buyers');
+        Schema::dropIfExists('request_as_seller');
     }
 };

@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('full_name', 100);
             $table->string('email', 200)->unique();
+            $table->string('gender', 10);
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('email_verify')->default(false);
             $table->string('image');
             $table->string('phone', 15);
-            $table->integer('status')->comment('1:banned, 0:unbanned')->default(1);
+            $table->string('dob')->comment('date of birth');
+            $table->enum('status', ['active', 'inactive', 'banned'])->default('active');
             $table->foreignId('role_id')
                 ->constrained('roles');
             $table->rememberToken();

@@ -69,12 +69,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255|unique:roles',
-                'description' => 'nullable|string',
-            ]);
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:roles',
+            'description' => 'nullable|string',
+        ]);
+        try {
             $role = Role::create($validated);
 
             return response()->json([
@@ -98,13 +98,6 @@ class RoleController extends Controller
     public function show(string $id)
     {
         $role = Role::findOrFail($id);
-        if(!$role){
-            return response()->json([
-                'verified' => false,
-                'status' => 'error',
-                'message' => 'Role not found',
-            ], 404);
-        }
         return response()->json([
             'verified' => true,
             'status' => 'success',

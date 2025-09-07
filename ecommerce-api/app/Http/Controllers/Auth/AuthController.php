@@ -112,7 +112,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-
     /**
      * Get the authenticated User.
      *
@@ -155,7 +154,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-
     /**
      * Log the user out (Invalidate the token).
      *
@@ -178,9 +176,10 @@ class AuthController extends Controller
         return $this->respondWithToken(auth('api')->refresh());
     }
 
-
     /**
      * Register a User.
+     *
+     * @param  Request  $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -206,7 +205,7 @@ class AuthController extends Controller
         }
         DB::beginTransaction();
         try {
-            $fileUploadService = new \App\Http\Controllers\Service\FileUploadService();
+            $fileUploadService = new \App\Http\Controllers\Service\FileService();
             $imageName = null;
             if ($request->hasFile('image')) {
                 $imageName = $fileUploadService->uploadFile($request->file('image'), 'users', null);
@@ -217,16 +216,16 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 'email_verified_at' => now(),
                 'email_verify' => true,
-                'image' => $imageName,
-                'phone' => $request->phone,
-                'status' => 0,
-                'role_id' => $roles->id
-            ]);
-            $buyer = Buyer::create([
-                'user_id' => $user->id,
                 'gender' => $request->gender,
                 'dob' => $request->dob,
-                'status' => 1,
+                'image' => $imageName,
+                'phone' => $request->phone,
+                'status' => 'active',
+                'role_id' => $roles->id,
+            ]);
+
+            $buyer = Buyer::create([
+                'user_id' => $user->id,
                 'loyalty_points' => 0,
             ]);
 

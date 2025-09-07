@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Buyer;
+use App\Models\Role;
+use App\Models\Seller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -45,10 +49,12 @@ class UserController extends Controller
                 'id' => $user->id,
                 'role' => $user->role ? $user->role->name : null,
                 'full_name' => $user->full_name,
+                'gender' => $user->gender,
                 'email' => $user->email,
                 'image' => $user->image,
                 'phone' => $user->phone,
                 'status' => $user->status,
+                'dob' => $user->dob,
                 'created_at' => $user->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $user->updated_at->format('Y-m-d H:i:s'),
             ];
@@ -161,6 +167,8 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

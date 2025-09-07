@@ -21,6 +21,8 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'full_name',
         'email',
+        'gender',
+        'dob',
         'password',
         'email_verified_at',
         'email_verify',
@@ -57,9 +59,23 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class);
     }
 
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
+
     public function buyer()
     {
         return $this->hasOne(Buyer::class);
+    }
+
+    public function requestAsSeller()
+    {
+        return $this->hasMany(RequestAsSeller::class);
+    }
+
+    public function address(){
+        return $this->hasOne(Address::class);
     }
 
     public function getJWTIdentifier()

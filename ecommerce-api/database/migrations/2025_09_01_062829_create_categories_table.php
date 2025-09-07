@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('buyers', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->bigInteger('loyalty_points')->default(0);
+            $table->string('name')->unique();
+            $table->string('slug')->unique();
+            $table->string('icon');
+            $table->foreignId('parent_id')->nullable()->constrained('categories');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('buyers');
+        Schema::dropIfExists('categories');
     }
 };

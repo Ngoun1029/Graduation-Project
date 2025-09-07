@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('buyers', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->bigInteger('loyalty_points')->default(0);
+            $table->string('address_line_1');
+            $table->string('address_line_2');
+            $table->string('city');
+            $table->string('stats');
+            $table->string('country_code');
+            $table->string('postal_code');
             $table->timestamps();
         });
     }
@@ -24,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('buyers');
+        Schema::dropIfExists('addresses');
     }
 };
